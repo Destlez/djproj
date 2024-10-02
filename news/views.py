@@ -7,7 +7,7 @@ from unicodedata import category
 
 from .forms import *
 from django.urls import  reverse_lazy
-from django.shortcuts import render, reverse, redirect
+from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -132,13 +132,25 @@ class CategoryList(DetailView):
         context['news_list']=Post.objects.filter(categories=category)
         return context
 
+# @login_required
+# def subs_category(request, pk):
+#     category = Category.objects.get(id=pk)
+#     created = Category.objects.get_or_create(user=request.user, subscribers=category)
+#
+#     if created:
+#         return redirect('/')
+#     else:
+#         return redirect("/sign/login/")
+#     return redirect('news_name_app:subs')
 @login_required
-def subs_category(request, pk):
-    category = Category.objects.get(id=pk)
-    subs, created = UserCategory.objects.get_or_create(user=request.user, category=category)
+def add_subscribers(request, pk):
+    user = request.user
+    category = get_object_or_404(Category, id=pk)
 
-    if created:
-        return redirect('/')
+    if user in category.subscribers.all():
+        message = 'Вы уже подписаны на эту категорию: '
     else:
-        return redirect("/sign/login/")
-    return redirect('news_name_app:subs')
+        category.subscribers.add(user)
+        message = 'Вы подписались на рассылку новостей: '
+
+    return render(request, 'subscr.html', {'category': category, 'message': message})

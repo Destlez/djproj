@@ -2,15 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Еженедельная рассылка новостей!</title>
+    <title>Еженедельная рассылка.</title>
 </head>
 <body>
-    <h4>Последние новости:</h4>
+    <h2>Новости за последнюю неделю: </h2>
     <li>
-        {% for f in post %}
-            <a href= "{{ link }}{{ f.get_absolute_url }}">{{ f.title.post }}</a>
+        {% for category in categories %}
+            <a>{{ category }}</a>
+            {% for p in post %}
+                    <a href="{{ link }}{{ p.get_absolute_url }}">{{ p.title }}</a>
+                    <p>{{ p.text|truncatechars:20 }}</p>
+            {% endfor %}
         {% endfor %}
     </li>
-
 </body>
 </html>

@@ -22,33 +22,32 @@ logger = logging.getLogger(__name__)
 def my_job():
     today = timezone.now()
     time_mail = today - datetime.timedelta(days=30)
-
-    # categories = dict(Category.objects.values('name'))
+    categories = set(Category.objects.values_list('name', flat=True))
     emails = Post.objects.filter(created_at__gte=time_mail).values_list('categories__subscribers__email', flat=True)
-    # emails = set(emails)
-    print('*************')
-    print(emails)
-    print('*************')
-    # subscribers = dict(UserCategory.objects.filter(category=categories).values_list('subscribers'))
-    #
-    # html_content = render_to_string(
-    #     template_name='dailynews.html',
-    #     context={
-    #         'post':post,
-    #         'link':settings.SITE_ID,
-    #     }
-    # )
-    #
-    # msg = EmailMultiAlternatives(
-    #     subject='Еженедельная сводеа',
-    #     body='',
-    #     from_email='NewsPeper159@yandex.ru',
-    #     id=subscribers,
-    #
-    # )
-    #
-    # msg.attach_alternative(html_content, "text/html")
-    # msg.send()
+    emails = set(emails)
+    post = Post.objects.filter(created_at__gte=time_mail)
+
+
+
+    html_content = render_to_string(
+        template_name='dailynews.html',
+        context={
+            'categories': categories,
+            'post':post,
+            'link':settings.SITE_ID,
+        }
+    )
+
+    msg = EmailMultiAlternatives(
+        subject='Еженедельная сводеа',
+        body='',
+        from_email='NewsPeper159@yandex.ru',
+        id=emails,
+
+    )
+
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
 
 

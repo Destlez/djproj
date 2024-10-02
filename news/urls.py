@@ -16,7 +16,7 @@ urlpatterns = [
     path('search/', Search.as_view()),
     path('category/', CategoryPost.as_view(), name='category'),
     path('catlist/<int:pk>', CategoryList.as_view(), name='catlist'),
-    path('catlist/<int:pk>/subs/', subs_category, name='subs'),
+    path('catlist/<int:pk>/subs/', add_subscribers, name='subs'),
 
 
 ]
