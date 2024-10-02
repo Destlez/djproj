@@ -1,0 +1,12 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+
+{% for news in news_list %}
+    <li> {{ news.title }} </li>
+    <li> {{ news.text }} </li>
+{% empty %}
+    <li> Нет доступныйх новостей. </li>
+{% endfor %}
+<button> <a href="{% url 'news_name_app:subs' catlist.id %}">Подписаться на рассылку</a> </button>
+
+{% endblock %}

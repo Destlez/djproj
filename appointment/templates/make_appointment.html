@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Form
+{% endblock title %}
+
+{% block content %}
+<h1>Форма</h1>
+
+<form action="{% url 'rassilka:appointment' %}" method="POST"
+      enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="client_name">Имя</label>
+    <input type="text" name="client_name"><br>
+    <label for="message">Сообщение</label>
+    <input type="text" name="message"><br>
+    <label for="date">Дата</label>
+    <input type="date" name="date">.<br>
+    <input type="submit">
+</form>
+{% endblock content %}

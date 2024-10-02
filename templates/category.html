@@ -1,0 +1,10 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+
+{% for f in categorypost %}
+    <li><a href="{% url 'news_name_app:catlist' f.id %}"> {{ f.name }} </a> </li>
+{% empty %}
+    <li> Нет доступныйх категорий. </li>
+{% endfor %}
+
+{% endblock %}

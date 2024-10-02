@@ -1,0 +1,53 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block content %}
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+        <input type="submit" value="Search">
+    </form>
+    {% if has_results %}
+        {% if news_cont %}
+            <table>
+                <tr>
+                    <td>Автор</td>
+                    <td>Дата</td>
+                    <td>Заголовок</td>
+                    <td>Текст</td>
+                    <td>Тип</td>
+                    <td>Рейтинг</td>
+                </tr>
+                {% for p in news_cont %}
+                <tr>
+                    <td>{{ p.author}}</td>
+                    <td>{{ p.created_at|date:'d M Y' }}</td>
+                    <td>{{ p.title|truncatewords:1|cens_word }}</td>
+                    <td>{{ p.text|truncatechars:20|cens_word }}</td>
+                    <td>{{ p.post_type }}</td>
+                    <td>{{ p.rating }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h1>Постов нет</h1>
+        {% endif %}
+        {% if page_obj.has_previous %}
+           <a href="?{% url_replace page=1 %}">1</a>
+           {% if page_obj.previous_page_number != 1 %}
+               ...
+               <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+           {% endif %}
+       {% endif %}
+
+       {{ page_obj.number }}
+
+       {% if page_obj.has_next %}
+           <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+           {% if paginator.num_pages != page_obj.next_page_number %}
+               ...
+               <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+           {% endif %}
+       {% endif %}
+    {% endif %}
+{% endblock content %}

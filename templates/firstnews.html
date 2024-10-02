@@ -1,0 +1,15 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1>{{ news_one.title }}</h1>
+<h3>{{ news_one.created_at|date:'d M Y' }}</h3>
+<a>{{ news_one.text }}</a>
+<h6>{{ news_one.post_type }}</h6>
+{% if category_name %}
+{% for x in category_name %}
+<li> {{ x.name }}</li>
+{% endfor %}
+{% else %}
+<h6> Категория не указана </h6>
+{% endif %}
+{% endblock content %}
