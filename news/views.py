@@ -1,8 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from lib2to3.fixes.fix_input import context
 
 from django.db.transaction import commit
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from unicodedata import category
 
 from .forms import *
@@ -11,7 +11,8 @@ from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
-
+from django.views import View
+from .tasks import every_week_news
 
 from .filters import NewsFilter
 from .models import *
@@ -154,3 +155,8 @@ def add_subscribers(request, pk):
         message = 'Вы подписались на рассылку новостей: '
 
     return render(request, 'subscr.html', {'category': category, 'message': message})
+
+class ewn(View):
+    def get(self, request):
+        every_week_news.delay()
+        return HttpResponse('text/html!')

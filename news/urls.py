@@ -1,4 +1,3 @@
-from django.urls import path
 from .views import *
 from django.urls import path
 
@@ -17,6 +16,7 @@ urlpatterns = [
     path('category/', CategoryPost.as_view(), name='category'),
     path('catlist/<int:pk>', CategoryList.as_view(), name='catlist'),
     path('catlist/<int:pk>/subs/', add_subscribers, name='subs'),
+    path('home/', ewn.as_view()),
 
 
 ]
