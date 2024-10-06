@@ -202,6 +202,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
-        'TIMEOUT': 30,
+        'TIMEOUT': 300,
     }
 }

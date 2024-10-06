@@ -15,7 +15,7 @@ urlpatterns = [
     path('article/<int:pk>/update/', PostUpdate.as_view(), name='post_update'),
     path('article/<int:pk>/delete/', PostDelete.as_view(), name='post_delete'),
     path('search/', Search.as_view()),
-    path('category/', cache_page(60)(CategoryPost.as_view()), name='category'),
+    path('category/', CategoryPost.as_view(), name='category'),
     path('catlist/<int:pk>', CategoryList.as_view(), name='catlist'),
     path('catlist/<int:pk>/subs/', add_subscribers, name='subs'),
     path('home/', ewn.as_view()),

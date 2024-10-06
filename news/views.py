@@ -14,6 +14,11 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from .tasks import every_week_news
 
+from django.core.paginator import Paginator
+
+
+
+
 
 
 from .filters import NewsFilter
@@ -162,3 +167,13 @@ class ewn(View):
     def get(self, request):
         every_week_news.delay()
         return HttpResponse('text/html!')
+
+
+
+def listing(request):
+    contact_list = Contact.objects.all()
+    paginator = Paginator(contact_list, 25) # Show 25 contacts per page.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'news.html', {'page_obj': page_obj})
