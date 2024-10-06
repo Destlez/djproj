@@ -14,6 +14,8 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from .tasks import every_week_news
 
+
+
 from .filters import NewsFilter
 from .models import *
 
