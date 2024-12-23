@@ -171,9 +171,126 @@ class ewn(View):
 
 
 def listing(request):
-    contact_list = Contact.objects.all()
-    paginator = Paginator(contact_list, 25) # Show 25 contacts per page.
+    contact_list = PostList.objects.all()
+    paginator = Paginator(contact_list, 10) # Show 25 contacts per page.
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'news.html', {'page_obj': page_obj})
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style': '{',
+    'formatters': {
+        'main_format': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': "%d.%m.%Y %H-%M-%S"
+        },
+        'main_warning': {
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s',
+            'datefmt': "%d.%m.%Y %H-%M-%S"
+        },
+        'main_error': {
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s %(exc_info)s',
+            'datefmt': "%d.%m.%Y %H-%M-%S"
+        },
+        'general_log': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s',
+            'datefmt': "%d.%m.%Y %H-%M-%S"
+        },
+        'errors_log': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s %(exc_info)s',
+            'datefmt': "%d.%m.%Y %H-%M-%S"
+        },
+        'security_log': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s',
+            'datefmt': "%d.%m.%Y %H-%M-%S"
+        },
+        'email': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s',
+            'datefmt': "%d.%m.%Y %H-%M-%S"
+        }
+    },
+'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler', #класс обработчика, который выводит информацию в консоль
+            'formatter': 'main_format'
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_warning'
+        },
+        'console_error': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_error'
+        },
+        'general': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',  #класс обработчика для записи в файл
+            'filename': 'logs/general.log', #путь и имя файла
+            'formatter': 'general_log'
+        },
+        'errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'logs/errors.log',
+            'formatter': 'errors_log'
+        },
+        'security': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'logs/security.log',
+            'formatter': 'security_log'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'email'
+        }
+    },
+'loggers': {
+        'django': {
+            'handlers': ['console', 'console_error', 'console_warning', 'general'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['errors', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['errors', 'mail_admins'],
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['errors'],
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['errors'],
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security'],
+            'propagate': True,
+        },
+    }
+}

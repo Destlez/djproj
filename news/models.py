@@ -69,7 +69,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        cache.delete(f'news-{self.pk}')
+        cache.delete(f'OnePost-{self.pk}')
 
 
 # Модель PostCategory

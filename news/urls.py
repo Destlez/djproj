@@ -6,8 +6,8 @@ from django.views.decorators.cache import cache_page
 app_name='news_name_app'
 
 urlpatterns = [
-    path('', cache_page(60)(PostList.as_view()), name='post_list'),
-    path('<int:pk>', cache_page(300)(OnePost.as_view()), name='onepost'),
+    path('', cache_page(1)(PostList.as_view()), name='post_list'),
+    path('<int:pk>', cache_page(1)(OnePost.as_view()), name='onepost'),
     path('news/create/', CreateForm.as_view(), name='crpost'),
     path('news/<int:pk>/update/', PostUpdate.as_view(), name='post_update'),
     path('news/<int:pk>/delete/', PostDelete.as_view(), name='post_delete'),
